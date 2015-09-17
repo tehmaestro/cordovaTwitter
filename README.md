@@ -1,31 +1,28 @@
-phonegap-twitter-plugin
+CordovaTwitter
 =======================
 
-I could not find a functional twitter plugin for native iOS functionality. 
-So I made one myself with bits and peices that I found best. 
-Feel free to pull request.
+Build upon the work [etiennea](https://github.com/etiennea) with its version for IOS, 
+but also need to work for android and be compatible with ionic (Angular),
+I decided to keep my own fork. 
+
 
 Tested in phonegap 4.x
 ----------------------
 
 Installation with cordova CLI
 
-    cordova plugin add cordova-plugin-twitter
+    cordova plugin add cordovaTwitter
   
 Installation with phonegap CLI
 
-    phonegap plugin add cordova-plugin-twitter
+    phonegap plugin add cordovaTwitter
+
+Installation with Ionic CLI
+
+	ionic plugin add cordovaTwitter
 
 
-For version 3.x and before
---------------------------
+if you need Ionic / Angular factory for simplify your work you can add angular/twitterFactory.js in your project
 
-Installation with cordova CLI
-
-    cordova plugin add https://github.com/etiennea/phonegap-twitter-plugin.git
-  
-Installation with phonegap CLI
-
-    phonegap plugin add https://github.com/etiennea/phonegap-twitter-plugin.git
 
 MIT license

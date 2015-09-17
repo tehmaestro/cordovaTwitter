@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    id="cordova-plugin-twitter"
-    version="0.6.0">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="cordova-plugin-twitter"
+  version="0.8.5">
 
-    <name>Twitter Connect</name>
-    <description>This is Etienne Adriaenssen's verison the plugin for Twitter in Apache Cordova/PhoneGap!</description>
-    <license>MIT</license>
+  <name>Cordova Twitter</name>
+  <description>This is Jesus Torres verison of the plugin for use Twitter in Apache Cordova/PhoneGap/Ionic application!</description>
+  <license>MIT</license>
 
-    <js-module src="www/TwitterPlugin.js" name="TwitterPlugin">
-        <clobbers target="Twitter" />
-    </js-module>
+  <js-module src="www/TwitterPlugin.js" name="TwitterPlugin">
+    <clobbers target="Twitter" />
+  </js-module>
 
-    <platform name="ios">
+  <platform name="ios">
+    <config-file target="config.xml" parent="/widget/plugins">
+      <feature name="TwitterPlugin">
+        <param name="ios-package" value="TwitterPlugin" />
+      </feature>
+    </config-file>
 
+    <header-file src="src/ios/TwitterPlugin.h" />
+    <source-file src="src/ios/TwitterPlugin.m" />
 
-        <config-file target="config.xml" parent="/widget/plugins">
-            <feature name="TwitterPlugin">
-                <param name="ios-package" value="TwitterPlugin" />
-            </feature>
-        </config-file>
+    <framework src="Twitter.framework" />
+    <framework src="Accounts.framework" weak="true" />
+  </platform>
 
-        <header-file src="src/ios/TwitterPlugin.h" />
-        <source-file src="src/ios/TwitterPlugin.m" />
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="TwitterPlugin">
+        <param name="android-package" value="com.phonegap.plugins.TwitterPlugin"/>
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+    <source-file src="src/android/TwitterPlugin.java" target-dir="src/com/phonegap/plugins" />
+    <source-file src="src/android/libs/twitter4j-core-4.0.4.jar" target-dir="libs/" />
+  </platform>
 
-        <framework src="Twitter.framework" />
-        <framework src="Accounts.framework" weak="true" />
-
-    </platform>
 </plugin>

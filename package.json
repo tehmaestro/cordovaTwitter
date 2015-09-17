@@ -1,27 +1,33 @@
 {
-	"name": "cordova-plugin-twitter",
-	"version": "0.6.0",
+	"name": "cordovaTwitter",
+	"version": "0.8.5",
 	"cordova": {
-		"id": "cordova-plugin-twitter",
-		"platforms": 
-		[
-		"ios"
+		"id": "cordovaTwitter",
+		"platforms": [
+			"ios",
+			"android"
 		]
-		},
-		"description": "Cordova Device Plugin",
-		"license": "MIT",
-		"repository":{
-			"type": "git",
-			"url": "https://github.com/etiennea/phonegap-twitter-plugin.git"
-			},
-			"keywords": [
-			"ecosystem:cordova",
-			"cordova",
-			"device",
-			"cordovaplugin",
-			"cordova-ios"
-			],
-			"author": "etiennead",
-			"contributors": [],
-			"homepage": "https://github.com/etiennea/phonegap-twitter-plugin"
-		}
+	},
+	"description": "Integrate Twitter with Cordova App",
+	"license": "MIT",
+	"repository":{
+		"type": "git",
+		"url": "https://github.com/jmtt89/cordovaTwitter.git"
+	},
+	"keywords": [
+		"ecosystem:cordova",
+		"cordova",
+		"device",
+		"cordovaplugin",
+		"cordova-ios",
+		"cordova-android",
+		"twitter",
+		"Angular",
+		"Ionic",
+		"ngCordova",
+		"phonegap"
+	],
+	"author": "jmtt89",
+	"contributors": ["etiennead"],
+	"homepage": "https://github.com/jmtt89/cordovaTwitter"
+}
