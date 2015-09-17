@@ -16,15 +16,15 @@ Installation
 
 Installation with cordova CLI
 
-    cordova plugin add cordovaTwitter
+    cordova plugin add cordova-twitter
   
 Installation with phonegap CLI
 
-    phonegap plugin add cordovaTwitter
+    phonegap plugin add cordova-twitter
 
 Installation with Ionic CLI
 
-	ionic plugin add cordovaTwitter
+	ionic plugin add cordova-twitter
 
 Configuration
 -------------
