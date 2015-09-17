@@ -1,8 +1,8 @@
 {
-  "name": "cordovaTwitter",
+  "name": "cordova-twitter",
   "version": "0.8.5",
   "cordova": {
-    "id": "cordovaTwitter",
+    "id": "cordova-twitter",
     "platforms": [
       "ios",
       "android"
