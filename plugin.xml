@@ -5,7 +5,7 @@
   version="0.8.5">
 
   <name>Cordova Twitter</name>
-  <description>This is Jesus Torres verison of the plugin for use Twitter in Apache Cordova/PhoneGap/Ionic application!</description>
+  <description>This is jmtt89 verison of the plugin for use Twitter in Apache Cordova/PhoneGap/Ionic application!</description>
   <license>MIT</license>
 
   <js-module src="www/TwitterPlugin.js" name="TwitterPlugin">

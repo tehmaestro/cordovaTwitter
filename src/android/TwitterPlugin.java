@@ -54,11 +54,11 @@ public class TwitterPlugin extends CordovaPlugin {
     private static String TWITTER_OAUTH_VERIFIER_FIELD = "verifier";
 
 
-    private static String TWITTER_CONSUMER_KEY = "miEtYd53qANl9KwIyr9NrgNcs";
-    private static String TWITTER_CONSUMER_SECRET = "THdPrNECOHhSPDOojGSRPZeVjfqUxOK72p6KIGhhiuNKtXJnbv";
-    private static String TWITTER_OAUTH_ACCESSTOKEN = "289556287-rFOF62TojrZPI74U5i7oOfiyxCaIEcBENp6OIQux";
-    private static String TWITTER_OAUTH_ACCESSTOKENSECRET= "sht2Gght1uYyoDyXLmrrbVHvl5gs8xeBZEv2Bhzc0Kzda";
-    private static String TWITTER_CALLBACK_URL = "";
+    private static String TWITTER_CONSUMER_KEY = "consumerKey";
+    private static String TWITTER_CONSUMER_SECRET = "secretKey";
+    private static String TWITTER_OAUTH_ACCESSTOKEN = "accesstoken";
+    private static String TWITTER_OAUTH_ACCESSTOKENSECRET= "accessSecret";
+    private static String TWITTER_CALLBACK_URL = "http://localhost.com";
 
     private static AccessToken loadAccessToken(){
         String token = mSharedPreferences.getString(TWITTER_OAUTH_FIELD,null);
@@ -78,7 +78,7 @@ public class TwitterPlugin extends CordovaPlugin {
             throw new RuntimeException("URLEncoder.encode() failed for " + s);
         }
     }
-    
+
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
