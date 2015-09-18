@@ -24,8 +24,8 @@ Twitter.prototype.isTwitterAvailable = function(response){
  *          console.log("twitter configured? " + r);
  *      });
  */
-Twitter.prototype.isTwitterSetup = function(response){
-    cordova.exec(response, null, "TwitterPlugin", "isTwitterSetup", []);
+Twitter.prototype.isTwitterSetup = function(success, failure, consumerKey, consumerSecret, oauthToken, oauthSecret){
+   cordova.exec(success, failure, "TwitterPlugin", "isTwitterSetup", [consumerKey, consumerSecret, oauthToken, oauthSecret]);
 };
 /**
  * Sends a Tweet to Twitter
@@ -39,11 +39,11 @@ Twitter.prototype.isTwitterSetup = function(response){
  * @param {Number} response.response - 1 on success, 0 on failure
  * @example
  *     window.plugins.twitter.composeTweet(
- *         function () { console.log("tweet success"); }, 
- *         function (error) { console.log("tweet failure: " + error); }, 
- *         "Text, Image, URL", 
+ *         function () { console.log("tweet success"); },
+ *         function (error) { console.log("tweet failure: " + error); },
+ *         "Text, Image, URL",
  *         {
- *             urlAttach:"http://youtu.be/Ot-rPGv85u4", 
+ *             urlAttach:"http://youtu.be/Ot-rPGv85u4",
  *             imageAttach:"http://i.ytimg.com/vi/obx2VOtx0qU/hqdefault.jpg?w=320&h=192&sigh=QD3HYoJj9dtiytpCSXhkaq1oG8M"
  *         }
  * );
@@ -67,10 +67,10 @@ Twitter.prototype.sendTweet = function(success,failure,tweetText,options){
  * @param {String} failure.error reason for failure
  * @example
  *     window.plugins.twitter.getPublicTimeline(
- *         function (response) { console.log("timeline success: " + JSON.stringify(response)); }, 
+ *         function (response) { console.log("timeline success: " + JSON.stringify(response)); },
  *         function (error) { console.log("timeline failure: " + error); }
  *     );
- * 
+ *
  * [Twitter Timeline Doc]: https://dev.twitter.com/docs/api/1/get/statuses/public_timeline
  */
 Twitter.prototype.getPublicTimeline = function(success, failure){
@@ -87,11 +87,11 @@ Twitter.prototype.getPublicTimeline = function(success, failure){
  * @param {String} text Hashtag to search in twitter
  * @example
  *     window.plugins.twitter.searchByHashtag(
- *         function (response) { console.log("timeline success: " + JSON.stringify(response)); }, 
+ *         function (response) { console.log("timeline success: " + JSON.stringify(response)); },
  *         function (error) { console.log("timeline failure: " + error); },
  *         "twitterPlugin"
  *     );
- * 
+ *
  * [Twitter Timeline Doc]: https://dev.twitter.com/rest/reference/get/search/tweets
  */
 Twitter.prototype.searchByHashtag = function(success, failure, text){
@@ -112,7 +112,7 @@ Twitter.prototype.searchByHashtag = function(success, failure, text){
  *         function (response) { console.log("mentions success: " + JSON.stringify(response)); },
  *         function (error) { console.log("mentions failure: " + error); }
  *     );
- * 
+ *
  * [Twitter Timeline Doc]: https://dev.twitter.com/docs/api/1/get/statuses/public_timeline
  */
 Twitter.prototype.getMentions = function(success, failure){
@@ -125,7 +125,7 @@ Twitter.prototype.getMentions = function(success, failure){
  * @param {Object[]} success.result Tweet objects, see [Twitter Mentions Doc]
  * @param {Function} failure callback
  * @param {String} failure.error reason for failure
- * 
+ *
  * [Twitter Mentions Doc]: https://dev.twitter.com/docs/api/1/get/statuses/mentions
  */
 Twitter.prototype.getTwitterUsername = function(success, failure) {
@@ -137,7 +137,7 @@ Twitter.prototype.getTwitterUsername = function(success, failure) {
  * @param {Object[]} success.result Tweet Profile, see [Twitter Doc]
  * @param {Function} failure callback
  * @param {String} failure.error reason for failure
- * 
+ *
  * [Twitter Mentions Doc]: https://dev.twitter.com/docs/api/1.1/get/users/show
  */
 Twitter.prototype.getTwitterProfile = function(success, failure) {
@@ -157,11 +157,11 @@ Twitter.prototype.getTwitterProfile = function(success, failure) {
  *     window.plugins.twitter.getTWRequest(
  *          'users/lookup.json',
  *          {user_id: '16141659,783214,6253282'},
- *          function (response) { console.log("usersLookup success: " + JSON.stringify(response)); }, 
+ *          function (response) { console.log("usersLookup success: " + JSON.stringify(response)); },
  *          function (error) { console.log("usersLookup failure: " + error); },
  *          {requestMethod: 'POST'}
  *     );
- * 
+ *
  * [Twitter API Endpoints]: https://dev.twitter.com/docs/api
  */
 Twitter.prototype.getTWRequest = function(url, params, success, failure, options){

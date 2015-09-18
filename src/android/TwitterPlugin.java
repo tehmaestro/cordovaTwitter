@@ -9,17 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.text.Html;
-import android.util.Log;
-import android.view.View;
 
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -29,16 +24,12 @@ import twitter4j.QueryResult;
 import twitter4j.Twitter;
 import twitter4j.Status;
 import twitter4j.Query;
-import twitter4j.QueryResult;
+
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterObjectFactory;
 import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.json.DataObjectFactory;
 
 
 /**
@@ -50,25 +41,11 @@ public class TwitterPlugin extends CordovaPlugin {
     Twitter twitter;
 
     private static String TWITTER_PREFERENCES = "twitterPref";
-    private static String TWITTER_OAUTH_FIELD = "oauth";
-    private static String TWITTER_OAUTH_VERIFIER_FIELD = "verifier";
 
-
-    private static String TWITTER_CONSUMER_KEY = "consumerKey";
-    private static String TWITTER_CONSUMER_SECRET = "secretKey";
-    private static String TWITTER_OAUTH_ACCESSTOKEN = "accesstoken";
-    private static String TWITTER_OAUTH_ACCESSTOKENSECRET= "accessSecret";
-    private static String TWITTER_CALLBACK_URL = "http://localhost.com";
-
-    private static AccessToken loadAccessToken(){
-        String token = mSharedPreferences.getString(TWITTER_OAUTH_FIELD,null);
-        String tokenSecret = mSharedPreferences.getString(TWITTER_OAUTH_VERIFIER_FIELD,null);
-        if(null != token && null != tokenSecret){
-            return new AccessToken(token, tokenSecret);
-        }else{
-            return null;
-        }
-    }
+    private static String TWITTER_CONSUMER_KEY;
+    private static String TWITTER_CONSUMER_SECRET;
+    private static String TWITTER_OAUTH_ACCESSTOKEN;
+    private static String TWITTER_OAUTH_ACCESSTOKENSECRET;
 
     private static String urlEncode(String s) {
         try {
@@ -85,17 +62,12 @@ public class TwitterPlugin extends CordovaPlugin {
         super.initialize(cordova, webView);
         context = this.cordova.getActivity().getApplicationContext();
 
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(TWITTER_CONSUMER_KEY)
-                .setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET)
-                .setOAuthAccessToken(TWITTER_OAUTH_ACCESSTOKEN)
-                .setOAuthAccessTokenSecret(TWITTER_OAUTH_ACCESSTOKENSECRET)
-                .setJSONStoreEnabled(true);
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        twitter = tf.getInstance();
-
         mSharedPreferences = context.getSharedPreferences(TWITTER_PREFERENCES, 0);
+        TWITTER_CONSUMER_KEY            = mSharedPreferences.getString("TWITTER_CONSUMER_KEY",null);
+        TWITTER_CONSUMER_SECRET         = mSharedPreferences.getString("TWITTER_CONSUMER_SECRET",null);
+        TWITTER_OAUTH_ACCESSTOKEN       = mSharedPreferences.getString("TWITTER_OAUTH_ACCESSTOKEN",null);
+        TWITTER_OAUTH_ACCESSTOKENSECRET = mSharedPreferences.getString("TWITTER_OAUTH_ACCESSTOKENSECRET", null);
+
     }
 
     @Override
@@ -104,6 +76,12 @@ public class TwitterPlugin extends CordovaPlugin {
             this.isTwitterAvailable(callbackContext);
             return true;
         }else if(action.equals("isTwitterSetup")){
+
+            TWITTER_CONSUMER_KEY            = args.getString(0).equals("null") ? null : args.getString(0);
+            TWITTER_CONSUMER_SECRET         = args.getString(1).equals("null") ? null : args.getString(1);
+            TWITTER_OAUTH_ACCESSTOKEN       = args.getString(2).equals("null") ? null : args.getString(2);
+            TWITTER_OAUTH_ACCESSTOKENSECRET = args.getString(3).equals("null") ? null : args.getString(3);
+
             this.isTwitterSetup(callbackContext);
             return true;
         }else if(action.equals("composeTweet")){
@@ -131,8 +109,8 @@ public class TwitterPlugin extends CordovaPlugin {
             this.getTwitterProfile(callbackContext);
             return true;
         }else if(action.equals("getTWRequest")){
-            String url = args.getJSONArray(0).getString(0);
-            String params = args.getJSONArray(0).getString(1);
+            String url = args.getString(0);
+            String params = args.getString(1);
             this.getTWRequest(callbackContext);
             return true;
         }else if(action.equals("reTweet")){
@@ -153,12 +131,41 @@ public class TwitterPlugin extends CordovaPlugin {
     }
 
     private void isTwitterAvailable(CallbackContext callbackContext) {
-        callbackContext.success();
+
+        if(TWITTER_OAUTH_ACCESSTOKEN !=  null && TWITTER_OAUTH_ACCESSTOKENSECRET  != null){
+            callbackContext.success(1);
+        }else{
+            callbackContext.success(0);
+        }
     }
 
     private void isTwitterSetup(CallbackContext callbackContext) {
 
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+
+        cb.setDebugEnabled(true)
+            .setJSONStoreEnabled(true)
+            .setOAuthConsumerKey(TWITTER_CONSUMER_KEY)
+            .setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
+
+        if(TWITTER_OAUTH_ACCESSTOKEN != null && TWITTER_OAUTH_ACCESSTOKENSECRET != null){
+
+            SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+            mEditor.putString("TWITTER_CONSUMER_KEY",TWITTER_CONSUMER_KEY);
+            mEditor.putString("TWITTER_CONSUMER_SECRET", TWITTER_CONSUMER_SECRET);
+            mEditor.putString("TWITTER_OAUTH_ACCESSTOKEN", TWITTER_OAUTH_ACCESSTOKEN);
+            mEditor.putString("TWITTER_OAUTH_ACCESSTOKENSECRET", TWITTER_OAUTH_ACCESSTOKENSECRET);
+            mEditor.apply();
+
+            cb.setOAuthAccessToken(TWITTER_OAUTH_ACCESSTOKEN)
+                .setOAuthAccessTokenSecret(TWITTER_OAUTH_ACCESSTOKENSECRET);
+        }
+
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        twitter = tf.getInstance();
+
         callbackContext.success();
+
     }
 
     private void composeTweet(String newStatus, CallbackContext callbackContext) {
@@ -176,6 +183,7 @@ public class TwitterPlugin extends CordovaPlugin {
         }
 
         context.startActivity(intent);
+        callbackContext.success();
 
     }
 
@@ -197,13 +205,6 @@ public class TwitterPlugin extends CordovaPlugin {
         try {
             List<Status> statuses = twitter.getHomeTimeline();
             JSONArray tweets = new JSONArray(TwitterObjectFactory.getRawJSON(statuses));
-
-            JSONObject tweet = null;
-            for (int i = 0; i < tweets.length(); i++) {
-                tweet = tweets.getJSONObject(i);
-            }
-
-
             callbackContext.success(tweets);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -275,7 +276,6 @@ public class TwitterPlugin extends CordovaPlugin {
     }
 
     private void getTWRequest(CallbackContext callbackContext) {
-
         callbackContext.success();
     }
 
