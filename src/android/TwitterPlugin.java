@@ -85,8 +85,8 @@ public class TwitterPlugin extends CordovaPlugin {
             this.isTwitterSetup(callbackContext);
             return true;
         }else if(action.equals("composeTweet")){
-            String text = args.getJSONObject(0).getString("text");
-            this.composeTweet(text,callbackContext);
+            JSONObject data = args.getJSONObject(0);
+            this.composeTweet(data,callbackContext);
             return true;
         }else if(action.equals("sendTweet")){
             String text = args.getJSONObject(0).getString("text");
@@ -168,11 +168,41 @@ public class TwitterPlugin extends CordovaPlugin {
 
     }
 
-    private void composeTweet(String newStatus, CallbackContext callbackContext) {
+    private void composeTweet(JSONObject data, CallbackContext callbackContext) {
 
         // Create intent using ACTION_VIEW and a normal Twitter url:
-        String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s", urlEncode(newStatus));
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
+        // Initializes the parameters
+        String text = null;
+        String urlAttach = null;
+        String imageAttach = null;
+        try {
+            text = data.getString("text");
+        } catch(JSONException e) {}
+        try {
+            urlAttach = data.getString("urlAttach");
+        } catch(JSONException e) {}
+        try {
+            imageAttach = data.getString("imageAttach");
+        } catch(JSONException e) {}
+
+        // Create the URL
+        Uri.Builder tweetUrl = new Uri.Builder();
+        tweetUrl.scheme("https")
+                .authority("twitter.com")
+                .appendPath("intent")
+                .appendPath("tweet");
+
+        if(text != null) {
+            tweetUrl.appendQueryParameter("text", text);
+        }
+        if(urlAttach != null) {
+            tweetUrl.appendQueryParameter("url", urlAttach);
+        }
+        if(imageAttach != null) {
+            tweetUrl.appendQueryParameter("image", imageAttach);
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, tweetUrl.build());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         // Narrow down to official Twitter app, if available:
         List<ResolveInfo> matches = context.getPackageManager().queryIntentActivities(intent, 0);
